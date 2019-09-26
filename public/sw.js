@@ -1,10 +1,15 @@
+var CACHE_STATIC_NAME = 'static-v3';
+var CACHE_DYNAMIC_NAME = 'dynamic-v2';
+
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...', event);
-  event.waitUntil(caches.open('static').then((cache) => {
+  event.waitUntil(caches.open(CACHE_STATIC_NAME).then((cache) => {
     console.log('[Service Worker] Precaching app shell');
     // cache.add('/');
     // cache.add('/index.html');
     // cache.add('/src/js/app.js');
+
+    // Put send the request and store data when the response is back
     cache.addAll([
       '/',
       '/index.html',
@@ -23,8 +28,18 @@ self.addEventListener('install', (event) => {
   })); // Esperamos que esta operación termine antes de seguir
 });
 
+// Sólo se activará cuando el usuario cierre todas las pestañas vinculadas a la app y la abra de nuevo
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Activating...', event);
+  // Limpiamos las caches
+  event.waitUntil(caches.keys().then((keyList) => {
+    return Promise.all(keyList.map((key) => {
+      if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME) {
+        console.log('[Service Worker] Removing old cache...', key);
+        return caches.delete(key);
+      }
+    }));
+  }));
   return self.clients.claim(); // Not necessary. Only makes it more robust
 });
 
@@ -33,7 +48,15 @@ self.addEventListener('fetch', (event) => {
     if (res) {
       return res;
     } else {
-      return fetch(event.request);
+      return fetch(event.request).then((res) => {
+        return caches.open(CACHE_DYNAMIC_NAME).then((cache) => {
+          // Put only store data, I must provide the request and the response
+          cache.put(event.request.url, res.clone());
+          return res;
+        });
+      }).catch((err) => {
+
+      });
     }
   }));
 });
