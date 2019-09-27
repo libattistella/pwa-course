@@ -1,18 +1,15 @@
-var CACHE_STATIC_NAME = 'static-v4';
+var CACHE_STATIC_NAME = 'static-v5';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...', event);
   event.waitUntil(caches.open(CACHE_STATIC_NAME).then((cache) => {
     console.log('[Service Worker] Precaching app shell');
-    // cache.add('/');
-    // cache.add('/index.html');
-    // cache.add('/src/js/app.js');
-
     // Put send the request and store data when the response is back
     cache.addAll([
       '/',
       '/index.html',
+      '/offline.html',
       '/src/js/app.js',
       '/src/js/feed.js',
       '/src/js/promise.js', // Not necessary because older browsers neither support sw
@@ -43,20 +40,65 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim(); // Not necessary. Only makes it more robust
 });
 
+// First cache, then network
 self.addEventListener('fetch', (event) => {
-  event.respondWith(caches.match(event.request).then((res) => {
-    if (res) {
-      return res;
-    } else {
-      return fetch(event.request).then((res) => {
-        return caches.open(CACHE_DYNAMIC_NAME).then((cache) => {
-          // Put only store data, I must provide the request and the response
-          cache.put(event.request.url, res.clone());
+  event.respondWith(caches.open(CACHE_DYNAMIC_NAME)
+    .then((cache) => {
+      return fetch(event.request)
+        .then((res) => {
+          cache.put(event.request, res.clone());
           return res;
-        });
-      }).catch((err) => {
-
-      });
-    }
-  }));
+        })
+    })
+  );
 });
+
+// self.addEventListener('fetch', (event) => {
+//   event.respondWith(caches.match(event.request)
+//     .then((res) => {
+//       if (res) {
+//         return res;
+//       } else {
+//         return fetch(event.request)
+//           .then((res) => {
+//             return caches.open(CACHE_DYNAMIC_NAME).then((cache) => {
+//               // Put only store data, I must provide the request and the response
+//               cache.put(event.request.url, res.clone());
+//               return res;
+//             });
+//           })
+//           .catch((err) => {
+//             return caches.open(CACHE_STATIC_NAME).then((cache) => {
+//               return cache.match('/offline.html');
+//             })
+//           });
+//       }
+//     })
+//   );
+// });
+
+// First network, then cache
+// self.addEventListener('fetch', (event) => {
+//   event.respondWith(fetch(event.request)
+//     .then((res) => {
+//       return caches.open(CACHE_DYNAMIC_NAME).then((cache) => {
+//         // Put only store data, I must provide the request and the response
+//         cache.put(event.request.url, res.clone());
+//         return res;
+//       });
+//     })
+//     .catch((err) => {
+//       return caches.match(event.request);
+//     })
+//   );
+// });
+
+// Cache only
+// self.addEventListener('fetch', (event) => {
+//   event.respondWith(caches.match(event.request))
+// });
+
+// Network only
+// self.addEventListener('fetch', (event) => {
+//   event.respondWith(fetch(event.request))
+// });

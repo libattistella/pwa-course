@@ -7,17 +7,14 @@ function openCreatePostModal() {
   createPostArea.style.display = 'block';
   if (deferredPrompt) {
     deferredPrompt.prompt();
-
     deferredPrompt.userChoise.then((result) => {
       console.log(result.outcome);
-
       if (result.outcome === 'dismissed') {
         console.log('User cancelled installation');
       } else {
         console.log('App added to homescreen');
       }
     });
-
     deferredPrompt = null;
   }
 }
@@ -30,15 +27,21 @@ shareImageButton.addEventListener('click', openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
-// function onSaveBtnClicked(event) {
-//   console.log('Save Button clicked', event);
-//   if ('caches' in window) {
-//     caches.open('user-requested').then((cache) => {
-//       cache.add('https://httpbin.org/get'); // Esto es como hacer el fetch y en la response, hacer el put
-//       cache.add('/src/images/sf-boat.jpg');
-//     });
-//   }
-// }
+function onSaveBtnClicked(event) {
+  console.log('Save Button clicked', event);
+  if ('caches' in window) {
+    caches.open('user-requested').then((cache) => {
+      cache.add('https://httpbin.org/get'); // Esto es como hacer el fetch y en la response, hacer el put
+      cache.add('/src/images/sf-boat.jpg');
+    });
+  }
+}
+
+function clearCards() {
+  while (sharedMomentsArea.hasChildNodes()) {
+    sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
+  }
+}
 
 function createCard() {
   var cardWrapper = document.createElement('div');
@@ -66,10 +69,32 @@ function createCard() {
   sharedMomentsArea.appendChild(cardWrapper);
 }
 
-fetch('https://httpbin.org/get')
+var url = 'https://httpbin.org/get';
+var networkDataReceived = false;
+
+fetch(url)
   .then(function(res) {
     return res.json();
   })
   .then(function(data) {
+    networkDataReceived = true;
+    console.log('From web', data);
+    clearCards();
     createCard();
   });
+
+if ('caches' in window) {
+  caches.match(url)
+    .then((res) => {
+      if (res) {
+        return res.json();
+      }
+    })
+    .then((data) => {
+      console.log('From cache', data);
+      if (!networkDataReceived) {
+        clearCards();
+        createCard();
+      }
+    });
+}
