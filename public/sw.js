@@ -53,6 +53,7 @@ self.addEventListener('fetch', (event) => {
       .then((cache) => {
         return fetch(event.request)
           .then((res) => {
+            // trimCache(CACHE_DYNAMIC_NAME, 10);
             cache.put(event.request, res.clone());
             return res;
           })
@@ -73,7 +74,8 @@ self.addEventListener('fetch', (event) => {
             .then((res) => {
               return caches.open(CACHE_DYNAMIC_NAME)
                 .then((cache) => {
-                  // Put only store data, I must provide the request and the response
+                  // trimCache(CACHE_DYNAMIC_NAME, 10);
+                  // Put method, only store data, I must provide the request and the response
                   cache.put(event.request.url, res.clone());
                   return res;
                 });
@@ -151,3 +153,17 @@ function isInArray(url, arr) {
   });
   return false;
 }
+
+// function trimCache(cacheName, maxItems) {
+//   caches.open(cacheName)
+//     .then((cache) => {
+//       return cache.keys()
+//         .then((keys) => {
+//           if (keys.length > maxItems) {
+//             // Delete de oldest one
+//             cache.delete(keys[0])
+//               .then(trimCache(cacheName, maxItems));
+//           }
+//         });
+//     });
+// }

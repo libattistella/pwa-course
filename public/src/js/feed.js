@@ -17,6 +17,16 @@ function openCreatePostModal() {
     });
     deferredPrompt = null;
   }
+
+  // // Así borramos un un service worker. Cuando recarguemos la app con conexión, se volverá a instalar
+  // if ('serviceWorker' in navigator) {
+  //   navigator.serviceWorker.getRegistrations()
+  //     .then((registrations) => {
+  //       registrations.forEach((registration) => {
+  //         registration.unregister();
+  //       })
+  //     });
+  // }
 }
 
 function closeCreatePostModal() {
