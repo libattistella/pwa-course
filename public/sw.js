@@ -1,4 +1,7 @@
-var CACHE_STATIC_NAME = 'static-v5';
+importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
+
+var CACHE_STATIC_NAME = 'static-v7';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 var STATIC_FILES = [
   '/',
@@ -6,6 +9,7 @@ var STATIC_FILES = [
   '/offline.html',
   '/src/js/app.js',
   '/src/js/feed.js',
+  '/src/js/idb.js',
   '/src/js/promise.js', // Not necessary because older browsers neither support sw
   '/src/js/fetch.js', // Not necessary because older browsers neither support sw
   '/src/js/material.min.js',
@@ -45,18 +49,23 @@ self.addEventListener('activate', (event) => {
 
 // First cache, then network
 self.addEventListener('fetch', (event) => {
-  var url = 'https://httpbin.org/get';
+  var url = 'https://pwagram-48f41.firebaseio.com/posts.json';
 
   if (event.request.url.indexOf(url) > -1) {
     // "Cache then network". Buscamos en la red, y guardamos en la cache
-    event.respondWith(caches.open(CACHE_DYNAMIC_NAME)
-      .then((cache) => {
-        return fetch(event.request)
-          .then((res) => {
-            // trimCache(CACHE_DYNAMIC_NAME, 10);
-            cache.put(event.request, res.clone());
-            return res;
+    event.respondWith(fetch(event.request)
+      .then((res) => {
+        var cloned = res.clone();
+        clearAllData('posts')
+          .then(() => {
+            return cloned.json()
           })
+          .then((data) => {
+            for (var key in data) {
+              writeData('posts', data[key]);
+            }
+          });
+        return res;
       })
     );
   } else if (isInArray(event.request.url, STATIC_FILES)) {
