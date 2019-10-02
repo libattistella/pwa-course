@@ -176,3 +176,37 @@ function isInArray(url, arr) {
 //         });
 //     });
 // }
+
+self.addEventListener('sync', (event) => {
+  console.log('[Service Worker] Background Syncing', event);
+  if (event.tag === 'sync-new-post') {
+    console.log('[Service Worker] Syncing new post');
+    event.waitUntil(
+      readAllData('sync-posts')
+        .then((data) => {
+          for (var dt of data) {
+            fetch('https://pwagram-48f41.firebaseio.com/posts.json', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({
+                id: dt.id,
+                title: dt.title,
+                location: dt.location,
+                image: 'http://www.santafeturismo.gov.ar/media/Puente%20Colgante.jpg'
+              })
+            }).then((res) => {
+              console.log('Data sent!', res);
+              if (res.ok) {
+                deleteItemFromData('sync-posts', dt.id);
+              }
+            }).catch((err) => {
+              console.log(err);
+            });
+          }
+        })
+    );
+  }
+});

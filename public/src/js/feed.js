@@ -2,6 +2,9 @@ var shareImageButton = document.querySelector('#share-image-button');
 var createPostArea = document.querySelector('#create-post');
 var closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 var sharedMomentsArea = document.querySelector('#shared-moments');
+var form = document.querySelector('form');
+var titleInput = document.querySelector('#title');
+var locationInput = document.querySelector('#location');
 
 function openCreatePostModal() {
   // createPostArea.style.display = 'block';
@@ -119,3 +122,59 @@ if ('indexedDB' in window) {
       }
     });
 }
+
+var sendData = () => {
+  fetch('https://pwagram-48f41.firebaseio.com/posts.json', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      id: new Date().toISOString(),
+      title: titleInput.value,
+      location: locationInput.value,
+      image: 'http://www.santafeturismo.gov.ar/media/Puente%20Colgante.jpg'
+    })
+  }).then((res) => {
+    console.log('Data sent!', res);
+    updateUI();
+  });
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (titleInput.value.trim() === '' && locationInput.value.trim() === '') {
+    alert('Please enter valid data!');
+    return;
+  }
+  closeCreatePostModal();
+
+  // Registering a background sync
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    navigator.serviceWorker.ready
+      .then((sw) => {
+        var post = {
+          id: new Date().toISOString,
+          title: titleInput.value,
+          location: locationInput.value
+        }
+        writeData('sync-posts', post)
+          .then(() => {
+            return sw.sync.register('sync-new-post');
+          })
+          .then(() => {
+            var snackbarContainer = document.querySelector('#confirmation-toast');
+            var data = {
+              message: 'Your post was saved for syncing!'
+            };
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+  } else {
+    sendData();
+  }
+});
