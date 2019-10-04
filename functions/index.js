@@ -5,8 +5,15 @@ const cors = require('cors')({
   origin: true
 });
 
+var serviceAccount = require("./pwagram-firebase-key.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://pwagram-48f41.firebaseio.com/'
+});
+
 exports.storePostData = functions.https.onRequest((request, response) => {
- cors((request, response) => {
+ cors(request, response, () => {
    admin.database().ref('posts').push({
     id: request.body.id,
     title: request.body.title,

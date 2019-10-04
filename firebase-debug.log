@@ -1,31 +1,31 @@
-[debug] [2019-10-04T12:11:00.441Z] ----------------------------------------------------------------------
-[debug] [2019-10-04T12:11:00.443Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lbattistella\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
-[debug] [2019-10-04T12:11:00.443Z] CLI Version:   7.4.0
-[debug] [2019-10-04T12:11:00.443Z] Platform:      win32
-[debug] [2019-10-04T12:11:00.443Z] Node Version:  v12.10.0
-[debug] [2019-10-04T12:11:00.444Z] Time:          Fri Oct 04 2019 09:11:00 GMT-0300 (GMT-03:00)
-[debug] [2019-10-04T12:11:00.444Z] ----------------------------------------------------------------------
+[debug] [2019-10-04T16:53:09.602Z] ----------------------------------------------------------------------
+[debug] [2019-10-04T16:53:09.604Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lbattistella\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-10-04T16:53:09.604Z] CLI Version:   7.4.0
+[debug] [2019-10-04T16:53:09.604Z] Platform:      win32
+[debug] [2019-10-04T16:53:09.604Z] Node Version:  v12.10.0
+[debug] [2019-10-04T16:53:09.605Z] Time:          Fri Oct 04 2019 13:53:09 GMT-0300 (GMT-03:00)
+[debug] [2019-10-04T16:53:09.605Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2019-10-04T12:11:00.450Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2019-10-04T12:11:00.451Z] > authorizing via signed-in user
-[debug] [2019-10-04T12:11:00.451Z] [iam] checking project pwagram-48f41 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2019-10-04T12:11:00.452Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2019-10-04T12:11:00.452Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+[debug] [2019-10-04T16:53:09.611Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-04T16:53:09.611Z] > authorizing via signed-in user
+[debug] [2019-10-04T16:53:09.611Z] [iam] checking project pwagram-48f41 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2019-10-04T16:53:09.612Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-10-04T16:53:09.613Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
  <request body omitted>
-[debug] [2019-10-04T12:11:04.583Z] <<< HTTP RESPONSE 200
-[debug] [2019-10-04T12:11:04.589Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pwagram-48f41:testIamPermissions  
+[debug] [2019-10-04T16:53:09.751Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-04T16:53:09.764Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pwagram-48f41:testIamPermissions  
 
-[debug] [2019-10-04T12:11:08.921Z] <<< HTTP RESPONSE 200
-[debug] [2019-10-04T12:11:08.924Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pwagram-48f41  
+[debug] [2019-10-04T16:53:10.902Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-04T16:53:10.906Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pwagram-48f41  
  
-[debug] [2019-10-04T12:11:13.285Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-04T16:53:11.225Z] <<< HTTP RESPONSE 200
 [info] 
 [info] === Deploying to 'pwagram-48f41'...
 [info] 
 [info] i  deploying functions, hosting
 [info] Running command: npm --prefix "$RESOURCE_DIR" run lint
 [info] +  functions: Finished running predeploy script.
-[debug] [2019-10-04T12:11:22.399Z] > [functions] package.json contents: {
+[debug] [2019-10-04T16:53:14.573Z] > [functions] package.json contents: {
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
@@ -52,36 +52,11 @@
   "private": true
 }
 [info] i  functions: ensuring necessary APIs are enabled...
-[debug] [2019-10-04T12:11:22.400Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/pwagram-48f41/services/cloudfunctions.googleapis.com  
+[debug] [2019-10-04T16:53:14.574Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/pwagram-48f41/services/cloudfunctions.googleapis.com  
  
-[debug] [2019-10-04T12:11:22.400Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/pwagram-48f41/services/runtimeconfig.googleapis.com  
+[debug] [2019-10-04T16:53:14.575Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/pwagram-48f41/services/runtimeconfig.googleapis.com  
  
-[debug] [2019-10-04T12:11:35.033Z] <<< HTTP RESPONSE 200
-[debug] [2019-10-04T12:11:35.054Z] <<< HTTP RESPONSE 200
-[info] +  functions: all necessary APIs are enabled
-[debug] [2019-10-04T12:11:35.058Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/pwagram-48f41/adminSdkConfig  
- 
-[debug] [2019-10-04T12:11:40.410Z] <<< HTTP RESPONSE 200
-[debug] [2019-10-04T12:11:40.414Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/pwagram-48f41/versions  
-
-[debug] [2019-10-04T12:12:01.426Z] Error: connect ETIMEDOUT 216.58.222.42:443
-    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1126:14)
-[error] 
-[error] Error: Server Error. connect ETIMEDOUT 216.58.222.42:443
-[debug] [2019-10-04T12:19:32.107Z] ----------------------------------------------------------------------
-[debug] [2019-10-04T12:19:32.109Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lbattistella\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
-[debug] [2019-10-04T12:19:32.109Z] CLI Version:   7.4.0
-[debug] [2019-10-04T12:19:32.109Z] Platform:      win32
-[debug] [2019-10-04T12:19:32.109Z] Node Version:  v12.10.0
-[debug] [2019-10-04T12:19:32.111Z] Time:          Fri Oct 04 2019 09:19:32 GMT-0300 (GMT-03:00)
-[debug] [2019-10-04T12:19:32.111Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2019-10-04T12:19:32.117Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2019-10-04T12:19:32.117Z] > authorizing via signed-in user
-[debug] [2019-10-04T12:19:32.117Z] [iam] checking project pwagram-48f41 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
-[debug] [2019-10-04T12:19:32.119Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/pwagram-48f41:testIamPermissions  
-
-[debug] [2019-10-04T12:19:58.699Z] Error: connect ETIMEDOUT 216.58.222.42:443
+[debug] [2019-10-04T16:53:35.671Z] Error: connect ETIMEDOUT 216.58.222.42:443
     at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1126:14)
 [error] 
 [error] Error: Server Error. connect ETIMEDOUT 216.58.222.42:443
