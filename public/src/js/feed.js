@@ -155,15 +155,16 @@ form.addEventListener('submit', (event) => {
     navigator.serviceWorker.ready
       .then((sw) => {
         var post = {
-          id: new Date().toISOString,
+          id: new Date().toISOString(),
           title: titleInput.value,
           location: locationInput.value
-        }
+        };
         writeData('sync-posts', post)
           .then(() => {
-            return sw.sync.register('sync-new-post');
+            return sw.sync.register('sync-new-posts');
           })
           .then(() => {
+            console.log('Your post was saved for syncing!');
             var snackbarContainer = document.querySelector('#confirmation-toast');
             var data = {
               message: 'Your post was saved for syncing!'

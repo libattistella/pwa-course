@@ -179,7 +179,7 @@ function isInArray(url, arr) {
 
 self.addEventListener('sync', (event) => {
   console.log('[Service Worker] Background Syncing', event);
-  if (event.tag === 'sync-new-post') {
+  if (event.tag === 'sync-new-posts') {
     console.log('[Service Worker] Syncing new post');
     event.waitUntil(
       readAllData('sync-posts')
@@ -200,7 +200,10 @@ self.addEventListener('sync', (event) => {
             }).then((res) => {
               console.log('Data sent!', res);
               if (res.ok) {
-                deleteItemFromData('sync-posts', dt.id);
+                deleteItemFromData('sync-posts', dt.id)
+                  .then(() => {
+                    console.log('Item deleted');
+                  });
               }
             }).catch((err) => {
               console.log(err);
