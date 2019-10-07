@@ -1,4 +1,5 @@
 var deferredPrompt;
+var enableNotifButtons = document.querySelectorAll('.enable-notifications');
 
 // Si mi navegador no soporta promesas, uso polyfills
 if (!window.Promise) {
@@ -19,3 +20,21 @@ window.addEventListener('beforeinstallprompt', (event) => {
   deferredPrompt = event;
   return false;
 });
+
+var askForPermission = () => {
+  Notification.requestPermission((result) => {
+    console.log('User choise', result);
+    if (result !== 'granted') {
+      console.log('Notification persmission denied');
+    } else {
+      // Hide buttons
+    }
+  });
+}
+
+if ('Notification' in window) {
+  for (let btn of enableNotifButtons) {
+    btn.style.display = 'inline-block';
+    btn.addEventListener('click', askForPermission);
+  }
+}
