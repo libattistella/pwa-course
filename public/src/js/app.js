@@ -45,6 +45,23 @@ var displayConfirmNotification = () => {
   }
 }
 
+var configurePushSubscription = () => {
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
+  navigator.serviceWorker.ready
+    .then((swReg) => {
+      return swReg.pushManager.getSubscription();
+    })
+    .then((sub) => {
+      if (sub === null) {
+        //Create a new subscription
+      } else {
+        // We have a subscription
+      }
+    })
+}
+
 var askForPermission = () => {
   Notification.requestPermission((result) => {
     console.log('User choise', result);
@@ -52,12 +69,13 @@ var askForPermission = () => {
       console.log('Notification persmission denied');
     } else {
       // Hide buttons
-      displayConfirmNotification();
+      // displayConfirmNotification();
+      configurePushSubscription();
     }
   });
 }
 
-if ('Notification' in window) {
+if ('Notification' in window && 'serviceWorker' in navigator) {
   for (let btn of enableNotifButtons) {
     btn.style.display = 'inline-block';
     btn.addEventListener('click', askForPermission);
