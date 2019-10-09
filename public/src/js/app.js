@@ -49,13 +49,19 @@ var configurePushSubscription = () => {
   if (!('serviceWorker' in navigator)) {
     return;
   }
+
+  var reg;
   navigator.serviceWorker.ready
     .then((swReg) => {
+      reg = swReg;
       return swReg.pushManager.getSubscription();
     })
     .then((sub) => {
       if (sub === null) {
         //Create a new subscription
+        reg.pushManager.subscribe({
+          userVisibleOnly: true
+        });
       } else {
         // We have a subscription
       }
