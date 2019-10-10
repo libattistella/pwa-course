@@ -1,8 +1,8 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-var CACHE_STATIC_NAME = 'static-v7';
-var CACHE_DYNAMIC_NAME = 'dynamic-v2';
+var CACHE_STATIC_NAME = 'static-v8';
+var CACHE_DYNAMIC_NAME = 'dynamic-v3';
 var STATIC_FILES = [
   '/',
   '/index.html',
@@ -195,7 +195,7 @@ self.addEventListener('sync', (event) => {
                 id: dt.id,
                 title: dt.title,
                 location: dt.location,
-                image: 'http://www.santafeturismo.gov.ar/media/Puente%20Colgante.jpg'
+                image: 'https://picsum.photos/id/577/536/354'
               })
             }).then((res) => {
               console.log('Data sent!', res);
@@ -235,7 +235,6 @@ self.addEventListener('notificationclose', (event) => {
   var action = event.action;
 
   console.log('Confirm was closed', event);
-
   console.log(notification);
   if (action === 'confirm') {
     console.log('Confirm was chosen');

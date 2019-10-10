@@ -15,7 +15,7 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('beforeinstallprompt', (event) => {
-  console.log('beforeinstallprompt fired');
+  console.log('beforeinstallprompt fired', event);
   event.preventDefault();
   deferredPrompt = event;
   return false;
@@ -40,7 +40,7 @@ var displayConfirmNotification = () => {
     };
     navigator.serviceWorker.ready
       .then((swReg) => {
-        swReg.showNotification('Successfully subscribed! (from SW)', options);
+        swReg.showNotification('Successfully subscribed!', options);
       })
   }
 }
@@ -59,13 +59,31 @@ var configurePushSubscription = () => {
     .then((sub) => {
       if (sub === null) {
         //Create a new subscription
-        reg.pushManager.subscribe({
-          userVisibleOnly: true
+        var vapidPublickey = 'BDqW4B_UhDaNpgq_XowY3wzeC8A1_yqFuiKIy4rBs-UOorpwee_oyj-CgvrsPYocefXs_rHgLoCuqxEa5aLDp6s';
+        var convertedVapidPublicKey = urlBase64ToUint8Array(vapidPublickey);
+        return reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidPublicKey
         });
       } else {
         // We have a subscription
       }
-    })
+    }).then((sub) => {
+      return fetch('https://pwagram-48f41.firebaseio.com/subscription.json', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(sub)
+      })
+    }).then((res) => {
+      if (res.ok) {
+        displayConfirmNotification();
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
 }
 
 var askForPermission = () => {

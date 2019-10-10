@@ -9,7 +9,7 @@ var locationInput = document.querySelector('#location');
 function openCreatePostModal() {
   // createPostArea.style.display = 'block';
   // setTimeout(function() {
-    createPostArea.style.transform = 'translateY(0)';
+  createPostArea.style.transform = 'translateY(0)';
   // }, 1);
   if (deferredPrompt) {
     deferredPrompt.prompt();
@@ -134,7 +134,7 @@ var sendData = () => {
       id: new Date().toISOString(),
       title: titleInput.value,
       location: locationInput.value,
-      image: 'http://www.santafeturismo.gov.ar/media/Puente%20Colgante.jpg'
+      image: 'https://picsum.photos/id/577/536/354'
     })
   }).then((res) => {
     console.log('Data sent!', res);
