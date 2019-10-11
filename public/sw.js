@@ -226,8 +226,22 @@ self.addEventListener('notificationclick', (event) => {
     console.log('Confirm was chosen');
   } else {
     console.log(action);
+    event.waitUntil(
+      clients.matchAll()
+        .then((clients) => {
+          var client= clients.find((c) => {
+            return c.visibilityState === 'visible';
+          });
+          if (client !== undefined) {
+            client.navigate(notification.data.url);
+            client.focus();
+          } else {
+            clients.openWindow(notification.data.url);
+          }
+          notification.close();
+        })
+    );
   }
-  notification.close();
 });
 
 self.addEventListener('notificationclose', (event) => {
@@ -235,11 +249,38 @@ self.addEventListener('notificationclose', (event) => {
   var action = event.action;
 
   console.log('Confirm was closed', event);
-  console.log(notification);
+  console.log('Notification', notification);
   if (action === 'confirm') {
     console.log('Confirm was chosen');
   } else {
     console.log(action);
   }
   notification.close();
+});
+
+self.addEventListener('push', (event) => {
+  console.log('Push notification was received', event);
+  var data = {
+    title: 'New',
+    content: 'Something new happened',
+    openUrl: '/'
+  };
+  if (event.data) {
+    data = JSON.parse(event.data.text());
+  }
+
+  var options = {
+    body: data.content,
+    icon: '/src/images/icons/app-icon-96x96.png',
+    vibrate: [100, 50, 200],
+    badge: '/src/images/icons/app-icon-96x96.png',
+    tag: 'push-notification',
+    data: {
+      url: data.openUrl
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  )
 });
