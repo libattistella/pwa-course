@@ -13,6 +13,33 @@ var imagePickerArea = document.querySelector('#pick-image');
 
 var initializeMedia = () => {
 
+  // For browsers that not support mediaDevices
+  if (!('mediaDevices' in navigator)) {
+    navigator.mediaDevices = {};
+  }
+
+  if (!('getUserMedia' in navigator.mediaDevices)) {
+    navigator.mediaDevices.getUserMedia = (constraints) => {
+      var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+      if (!getUserMedia) {
+        return Promise.reject(new Error('getUserMedia not implemented'));
+      }
+
+      return new Promise((resolve, reject) => {
+        getUserMedia.call(navigator, constraints, resolve, reject);
+      });
+    }
+  }
+
+  navigator.mediaDevices.getUserMedia({
+    video: true
+  }).then((stream) => {
+    videoPlayer.srcObject = stream;
+    videoPlayer.style.display = 'block';
+  }).catch((err) => {
+    imagePickerArea.style.display = 'block';
+  });
 }
 
 function openCreatePostModal() {
@@ -51,6 +78,8 @@ function openCreatePostModal() {
 function closeCreatePostModal() {
   createPostArea.style.transform = 'translateY(100vh)';
   // createPostArea.style.display = 'none';
+  videoPlayer.style.display = 'none';
+  imagePickerArea.style.display = 'none';
 }
 
 shareImageButton.addEventListener('click', openCreatePostModal);
